@@ -1,8 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../navigation/type";
+
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { Item } from "../domain/item";
+import { useAppDispatch, useAppSelector } from "../../../app/hook";
+import { fetchProducts } from "../store/prodcutSlice";
+import { RootStackParamList } from "../../../app/navigation/type";
 
 
 
@@ -10,19 +13,18 @@ import { Item } from "../domain/item";
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
-  const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const { items, loading } = useAppSelector((state) => state.product);
 
   useEffect(() => {
-    getItems()
-      .then(setItems)
-      .finally(() => setLoading(false));
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   if (loading) return <ActivityIndicator />;
 
   return (
-    <View style={{ flex: 1, padding: 16, backgroundColor:'red' }}>
+    <View style={{ flex: 1, padding: 16, backgroundColor: 'red' }}>
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
