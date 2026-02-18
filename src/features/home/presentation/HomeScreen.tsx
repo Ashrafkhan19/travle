@@ -1,11 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { Item } from "../domain/item";
 import { useAppDispatch, useAppSelector } from "../../../app/hook";
 import { fetchProducts } from "../store/prodcutSlice";
 import { RootStackParamList } from "../../../app/navigation/type";
+import Loader from "../../../core/components/loader";
+import Error from "../../../core/components/error";
+import NoProduct from "../../../core/components/noProduct";
+import ProductItem from "./components/productItem";
 
 
 
@@ -15,43 +19,37 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 export default function HomeScreen({ navigation }: Props) {
 
   const dispatch = useAppDispatch();
-  const { items, loading } = useAppSelector((state) => state.product);
+  const { items, loading, error } = useAppSelector((state) => state.product);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <ActivityIndicator />;
+  const onRefresh = useCallback(async () => {
+    try {
+      setRefreshing(true);
+      await dispatch(fetchProducts()).unwrap();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [dispatch]);
+
+  if (loading) return <Loader />;
+
+  if (error) return <Error onPress={onRefresh} />;
+
+  if (items.length === 0) return <NoProduct />;
 
   return (
-    <View style={{ flex: 1, padding: 16, backgroundColor: 'red' }}>
+    <View style={{ flex: 1, padding: 16, }}>
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Detail", { item })}
-          >
-            <Text style={{ fontSize: 18, marginBottom: 12 }}>
-              {item.title}
-            </Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => <ProductItem item={item} onPress={() => { navigation.navigate("Detail", { item: item }) }} />}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </View>
   );
-}
-
-export async function getItems(): Promise<Item[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { id: "1", title: "MacBook Pro M3" },
-        { id: "2", title: "iPhone 15 Pro" },
-        { id: "3", title: "Samsung Galaxy S24" },
-        { id: "4", title: "Sony WH-1000XM5" },
-        { id: "5", title: "PlayStation 5" },
-      ]);
-    }, 1000); // simulate network delay
-  });
 }
