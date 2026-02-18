@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Image, Text, View } from "react-native";
 import { RootStackParamList } from "../../../app/navigation/type";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
+type Props = NativeStackScreenProps<RootStackParamList, "Product Detail">;
 
 export default function DetailScreen({ route }: Props) {
   const { item } = route.params;

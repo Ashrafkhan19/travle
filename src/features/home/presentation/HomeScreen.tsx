@@ -14,7 +14,7 @@ import ProductItem from "./components/productItem";
 
 
 
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+type Props = NativeStackScreenProps<RootStackParamList, "Product">;
 
 export default function HomeScreen({ navigation }: Props) {
 
@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation }: Props) {
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductItem item={item} onPress={() => { navigation.navigate("Detail", { item: item }) }} />}
+        renderItem={({ item }) => <ProductItem item={item} onPress={() => { navigation.navigate("Product Detail", { item: item }) }} />}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
