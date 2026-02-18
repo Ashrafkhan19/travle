@@ -10,7 +10,7 @@ const Button = ({ onPress, title }: { onPress?: () => void, title?: string }) =>
                 borderRadius: 5,
                 margin: 5
             }}>
-                <Text style={{ color: 'white', fontSize: 16 }}>{title}</Text>
+                <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>{title}</Text>
             </View>
         </TouchableOpacity>
     );
