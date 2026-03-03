@@ -3,11 +3,18 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Image, Text, View } from "react-native";
 import { RootStackParamList } from "../../../app/navigation/type";
 import Button from "../../../core/components/button";
+import { useAppDispatch } from "../../../app/hook";
+import { addItem } from "../../cart/store/cartSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Product Detail">;
 
 export default function DetailScreen({ route }: Props) {
   const { item } = route.params;
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addItem(item));
+  };
 
   return (
     <View style={{ flex: 1, }}>
@@ -19,7 +26,7 @@ export default function DetailScreen({ route }: Props) {
         <Text style={{ fontSize: 16, fontWeight: 'medium' }}>{item.description}</Text>
         <Text style={{ fontSize: 16, fontWeight: 'bold' }}>${item.price}</Text>
       </View>
-      <Button title="Add to Cart" />
+      <Button title="Add to Cart" onPress={handleAddToCart} />
     </View>
   );
 }

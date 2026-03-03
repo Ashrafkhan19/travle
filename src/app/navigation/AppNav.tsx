@@ -3,6 +3,8 @@ import { RootStackParamList } from "./type";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../../features/home/presentation/HomeScreen";
 import DetailScreen from "../../features/detail/presentation/detail";
+import CartScreen from "../../features/cart/presentation/CartScreen";
+import CartBadge from "../../core/components/CartBadge";
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -10,9 +12,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerRight: () => <CartBadge />,
+        }}
+      >
         <Stack.Screen name="Product" component={HomeScreen} />
         <Stack.Screen name="Product Detail" component={DetailScreen} />
+        <Stack.Screen name="Cart" component={CartScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
