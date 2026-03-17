@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:dev": "ENVFILE=.env.development react-native run-android",
+    "android:prod": "ENVFILE=.env.production react-native run-android --variant=release",
     "ios": "react-native run-ios",
+    "ios:dev": "ENVFILE=.env.development react-native run-ios",
+    "ios:prod": "ENVFILE=.env.production react-native run-ios --configuration Release",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
@@ -17,6 +21,7 @@
     "axios": "^1.13.5",
     "react": "19.2.0",
     "react-native": "0.83.1",
+    "react-native-config": "^1.6.1",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-permissions": "^5.5.1",
     "react-native-safe-area-context": "^5.6.2",
